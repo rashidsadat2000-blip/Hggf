@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>نامه و رسید PDF</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--tx:#1b1f24;--mut:#6b7280;--bd:#d9dde3;--ac:#0f766e;--act:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171a;--card:#1e2328;--tx:#eceff3;--mut:#9aa3ad;--bd:#33393f;--ac:#2dd4bf;--act:#06201d}}
+:root[data-theme="dark"]{--bg:#14171a;--card:#1e2328;--tx:#eceff3;--mut:#9aa3ad;--bd:#33393f;--ac:#2dd4bf;--act:#06201d}
+*{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden;overscroll-behavior-x:none;touch-action:pan-y;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;font-size:16px}
+.wrap{max-width:720px;margin:0 auto;padding:12px}
+h1{font-size:20px;margin:6px 0 12px}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tabs button{flex:1;padding:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font:inherit;font-weight:700}
+.tabs button.on{background:var(--ac);color:var(--act);border-color:var(--ac)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;display:grid;gap:10px}
+label{font-size:13px;color:var(--mut);display:grid;gap:4px}
+input,textarea{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+textarea{min-height:170px;resize:vertical;line-height:1.8}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.go{padding:14px;border:0;border-radius:10px;background:var(--ac);color:var(--act);font:inherit;font-weight:700;font-size:17px;width:100%}
+.go.s{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;position:sticky;bottom:0;z-index:5;background:var(--bg);padding:8px 0}
+#msg{grid-column:1/-1}
+.padbox{border:2px dashed var(--ac);border-radius:12px;background:#fff;position:relative;overflow:hidden}
+#pad{display:block;width:100%;aspect-ratio:800/360;touch-action:none;cursor:crosshair}
+.padhint{position:absolute;inset:auto 0 8px 0;text-align:center;color:#aaa;font-size:13px;pointer-events:none}
+.hi{display:flex;gap:6px;align-items:center;border:1px solid var(--bd);border-radius:8px;padding:8px}.hi span{flex:1;font-size:14px}.hi button{padding:6px 12px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);font:inherit}
+.paper.cardm{width:680px;min-height:378px;height:378px;padding:0;overflow:hidden}
+.cd{height:350px;margin:14px;border:3px solid #0f766e;border-radius:14px;padding:24px 34px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.cs{font-size:40px;font-weight:700;color:#0f766e}.cn{font-size:22px;font-weight:700}.cl{font-size:22px;line-height:1.5}
+.clr{padding:8px 14px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);font:inherit;justify-self:start}
+#msg{text-align:center;color:var(--mut);font-size:14px;min-height:20px}
+.pv{overflow:hidden;border:1px solid var(--bd);border-radius:8px;margin-top:10px;background:#888}
+#scaler{transform-origin:top right}
+.paper{width:794px;min-height:1123px;background:#fff;color:#111;padding:60px 64px;font-family:Vazirmatn,Tahoma,sans-serif;direction:rtl;position:relative}
+.paper .hd{text-align:center;border-bottom:3px double #111;padding-bottom:14px;margin-bottom:20px}
+.paper .shop{font-size:30px;font-weight:700}
+.paper .sub{font-size:15px;margin-top:4px;color:#333}
+.paper .meta{display:flex;justify-content:space-between;font-size:16px;margin-bottom:14px}
+.paper .ttl{text-align:center;font-size:24px;font-weight:700;margin:10px 0 16px}
+.paper .to{font-size:18px;font-weight:700;margin-bottom:12px}
+.paper .body{font-size:19px;line-height:2.1;white-space:pre-wrap;word-wrap:break-word}
+.paper .amt{border:2px solid #111;border-radius:8px;padding:10px;text-align:center;font-size:22px;font-weight:700;margin:12px 0}
+.paper .sig{margin-top:60px;display:flex;justify-content:space-between;font-size:17px}
+.paper .sig div{min-width:200px;text-align:center;border-top:1px solid #111;padding-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>نامه و رسید ← PDF</h1>
+<div class="tabs" id="tabs">
+<button data-t="letter" class="on">نامه</button>
+<button data-t="receipt">رسید</button>
+<button data-t="free">متن آزاد</button>
+<button data-t="card">کارت</button>
+</div>
+<div class="card">
+<div class="row">
+<label>نام دوکان / فرستنده<input id="shop" placeholder="دوکان ..."></label>
+<label>شماره تماس / آدرس<input id="sub" placeholder="0700..."></label>
+</div>
+<div class="row">
+<label>تاریخ<input id="date"></label>
+<label id="lblTo">به محضر<input id="to" placeholder="نام گیرنده"></label>
+</div>
+<label id="lblTitle">عنوان (اختیاری)<input id="title"></label>
+<div class="row" id="cardf" style="display:none"><label>آدرس دوکان<input id="addr" placeholder="شهر، سرک، مارکیت، دوکان"></label><label>شماره موبایل<input id="tel" value="0748494107" inputmode="tel" dir="ltr"></label></div>
+<label id="lblAmt" style="display:none">مبلغ<input id="amt" placeholder="مثلاً 5000 افغانی"></label>
+<label>متن<textarea id="body" placeholder="متن را اینجا بنویسید..."></textarea></label>
+<label>نام امضاکننده<input id="sig" placeholder="نام زیر امضا"></label>
+<label>امضا (با انگشت بکشید)
+<div class="padbox"><canvas id="pad" width="800" height="360"></canvas><div class="padhint" id="padhint">اینجا امضا کنید</div></div>
+<button type="button" class="clr" id="clr">پاک کردن امضا</button></label>
+</div>
+<div class="btns">
+<button class="go" id="save">ذخیره PDF</button>
+<button class="go s" id="share">ارسال / اشتراک PDF</button>
+<button class="go s" id="dbsave" style="grid-column:1/-1">ذخیره در دیتابیس</button>
+<div id="msg"></div>
+</div>
+<div class="card" id="hist" style="display:none;margin-bottom:10px"><b>ذخیره‌شده‌ها</b><div id="hl" style="display:grid;gap:8px"></div></div>
+<div class="pv" id="pv"><div id="scaler"><div class="paper" id="paper"></div></div></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let type='letter',sigData='';
+const F=['shop','sub','date','to','title','amt','body','sig','addr','tel'];
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+try{const s=JSON.parse(localStorage.getItem('pdfnama')||'{}');if(s.shop)$('shop').value=s.shop;if(s.sub)$('sub').value=s.sub;if(s.sig)$('sig').value=s.sig;if(s.addr)$('addr').value=s.addr;if(s.tel)$('tel').value=s.tel}catch(e){}
+try{$('date').value=new Date().toLocaleDateString('fa-AF-u-ca-persian')}catch(e){$('date').value=new Date().toLocaleDateString()}
+function html(){
+const v=Object.fromEntries(F.map(k=>[k,esc($(k).value)]));
+if(type==='card')return `<div class="cd"><div class="cs">${v.shop||'نام دوکان'}</div>${v.sig?`<div class="cn">${v.sig}</div>`:''}${v.addr?`<div class="cl">آدرس: ${v.addr}</div>`:''}${v.tel?`<div class="cl">تماس: <span dir="ltr">${v.tel}</span></div>`:''}</div>`;
+const ttl=v.title||(type==='receipt'?'رسید':'');
+return `<div class="hd"><div class="shop">${v.shop||'&nbsp;'}</div><div class="sub">${v.sub}</div></div>
+<div class="meta"><span>تاریخ: ${v.date}</span></div>
+${ttl?`<div class="ttl">${ttl}</div>`:''}
+${v.to&&type!=='free'?`<div class="to">${type==='receipt'?'از:':'به محضر'} ${v.to}</div>`:''}
+${type==='receipt'&&v.amt?`<div class="amt">مبلغ: ${v.amt}</div>`:''}
+<div class="body">${v.body}</div>
+${v.sig||sigData?`<div class="sig"><div>${sigData?`<img src="${sigData}" style="max-height:130px;max-width:260px;display:block;margin:0 auto 4px">`:''}${v.sig}</div></div>`:''}`}
+function render(){
+$('paper').innerHTML=html();
+const w=$('pv').clientWidth,k=Math.min(1,w/$('paper').offsetWidth);
+$('scaler').style.transform=`scale(${k})`;
+$('pv').style.height=($('paper').offsetHeight*k)+'px';
+try{localStorage.setItem('pdfnama',JSON.stringify({shop:$('shop').value,sub:$('sub').value,sig:$('sig').value,addr:$('addr').value,tel:$('tel').value,img:sigData}))}catch(e){}
+}
+F.forEach(k=>$(k).addEventListener('input',render));
+addEventListener('resize',render);
+$('tabs').addEventListener('click',e=>{
+const t=e.target.dataset.t;if(!t)return;type=t;
+[...$('tabs').children].forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+$('lblAmt').style.display=t==='receipt'?'grid':'none';
+$('lblTo').firstChild.textContent=t==='receipt'?'دریافت از':'به محضر';
+$('lblTo').style.display=t==='free'||t==='card'?'none':'grid';
+const c=t==='card';
+$('cardf').style.display=c?'grid':'none';
+[$('date').closest('.row'),$('sub').closest('label'),$('lblTitle'),$('body').closest('label'),$('pad').closest('label')].forEach(e=>e.style.display=c?'none':'');
+$('paper').classList.toggle('cardm',c);
+render();});
+async function makePdf(){
+await (document.fonts&&document.fonts.ready);
+const host=document.createElement('div');
+host.style.cssText='position:fixed;left:-9999px;top:0';
+const el=document.createElement('div');el.className='paper'+(type==='card'?' cardm':'');el.innerHTML=html();
+host.appendChild(el);document.body.appendChild(host);
+let cv;try{cv=await html2canvas(el,{scale:2,backgroundColor:'#fff',useCORS:true})}finally{host.remove()}
+const {jsPDF}=window.jspdf;const cardm=type==='card';
+const pdf=new jsPDF(cardm?{unit:'mm',format:[90,50],orientation:'landscape'}:{unit:'mm',format:'a4'});
+const pageH=cardm?cv.height:Math.floor(cv.width*297/210);let y=0,first=true;
+while(y<cv.height){
+const h=Math.min(pageH,cv.height-y);
+const c=document.createElement('canvas');c.width=cv.width;c.height=pageH;
+const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);
+g.drawImage(cv,0,y,cv.width,h,0,0,cv.width,h);
+if(!first)pdf.addPage();first=false;
+pdf.addImage(c.toDataURL('image/jpeg',0.92),'JPEG',0,0,cardm?90:210,cardm?50:297);
+y+=pageH;}
+return pdf.output('blob');}
+function fname(){return (type==='receipt'?'رسید':type==='letter'?'نامه':type==='card'?'کارت':'متن')+'-'+Date.now()+'.pdf'}
+function say(t){$('msg').textContent=t}
+$('save').onclick=async()=>{
+say('در حال ساختن PDF...');
+try{
+const blob=await makePdf();
+const d=window.claude&&await claude.use('downloads');
+if(!d){say('ذخیره در این نمایش ممکن نیست. دکمه ارسال را امتحان کنید.');return}
+await d.save({filename:fname(),data:blob});say('آماده شد ✓');saveRec();
+}catch(e){say(e&&e.code==='declined'?'لغو شد.':'خطا: '+(e.message||e))}};
+$('share').onclick=async()=>{
+say('در حال ساختن PDF...');
+try{
+const blob=await makePdf();const f=new File([blob],fname(),{type:'application/pdf'});
+if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});say('✓')}
+else say('اشتراک در این نمایش ممکن نیست. از «ذخیره PDF» استفاده کنید.');
+}catch(e){say(e&&e.name==='AbortError'?'لغو شد.':'خطا: '+(e.message||e))}};
+const pad=$('pad'),px=pad.getContext('2d');
+px.lineWidth=5;px.lineCap='round';px.lineJoin='round';px.strokeStyle='#111';
+let drawing=false;
+function pt(e){const r=pad.getBoundingClientRect();return[(e.clientX-r.left)*pad.width/r.width,(e.clientY-r.top)*pad.height/r.height]}
+pad.addEventListener('pointerdown',e=>{e.preventDefault();drawing=true;pad.setPointerCapture(e.pointerId);const[x,y]=pt(e);px.beginPath();px.moveTo(x,y);px.lineTo(x+0.1,y+0.1);px.stroke();$('padhint').style.display='none'});
+pad.addEventListener('pointermove',e=>{if(!drawing)return;e.preventDefault();const[x,y]=pt(e);px.lineTo(x,y);px.stroke()});
+const endDraw=()=>{if(!drawing)return;drawing=false;sigData=pad.toDataURL('image/png');render()};
+pad.addEventListener('pointerup',endDraw);pad.addEventListener('pointercancel',endDraw);
+$('clr').onclick=()=>{px.clearRect(0,0,pad.width,pad.height);sigData='';$('padhint').style.display='';render()};
+try{const s=JSON.parse(localStorage.getItem('pdfnama')||'{}');if(s.img){sigData=s.img;$('padhint').style.display='none';const im=new Image();im.onload=()=>px.drawImage(im,0,0,pad.width,pad.height);im.src=s.img}}catch(e){}
+let col=null;
+function rec(){const r={type,ts:Date.now()};F.forEach(k=>r[k]=$(k).value);return r}
+async function saveRec(){if(!col){say('دیتابیس در این نمایش وصل نیست.');return false}
+try{await col.doc(String(Date.now())).set(rec());return true}catch(e){say('خطای دیتابیس: '+(e.message||e));return false}}
+$('dbsave').onclick=async()=>{if(await saveRec())say('در دیتابیس ذخیره شد ✓')};
+function list(snap){const h=$('hl');h.textContent='';const ds=snap.docs.map(d=>({id:d.id,r:d.data()})).sort((a,b)=>b.r.ts-a.r.ts);
+$('hist').style.display=ds.length?'grid':'none';
+ds.forEach(({id,r})=>{const row=document.createElement('div');row.className='hi';const s=document.createElement('span');
+s.textContent=({letter:'نامه',receipt:'رسید',free:'متن'}[r.type]||'')+' — '+(r.to||r.title||(r.body||'').slice(0,25))+' — '+(r.date||'');
+const o=document.createElement('button');o.textContent='باز کردن';o.onclick=()=>{document.querySelector('[data-t="'+r.type+'"]').click();F.forEach(k=>{$(k).value=r[k]||''});render();scrollTo(0,0)};
+const x=document.createElement('button');x.textContent='حذف';x.onclick=()=>col.doc(id).delete();
+row.append(s,o,x);h.append(row)})}
+(async()=>{try{if(!window.claude)return;const db=await claude.use('db'),u=await claude.use('user');if(!db||!u)return;const id=await u.id();if(!id)return;
+col=db.collection('data/users/'+id+'/docs');col.onSnapshot(list)}catch(e){}})();
+render();
+</script>
+</body>
+</html>
